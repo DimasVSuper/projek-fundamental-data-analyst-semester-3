@@ -1,299 +1,247 @@
-# 🎯 Decision Tree Classification Project - Suicide Case Risk Prediction
+# 🎯 Proyek Klasifikasi Decision Tree - Prediksi Risiko Kasus Bunuh Diri
 
-## 📊 Project Overview
+## 📊 Ikhtisar Proyek
 
-**Objective**: Develop a machine learning model to identify high-risk areas for suicide cases in Jawa Barat province (2019-2021) to enable data-driven preventive interventions.
+**Tujuan**: Mengembangkan model machine learning untuk mengidentifikasi wilayah berisiko tinggi untuk kasus bunuh diri di Provinsi Jawa Barat (2019-2021) guna memungkinkan intervensi pencegahan berbasis data.
 
 **Framework**: CRISP-DM (Cross-Industry Standard Process for Data Mining)
 
-**Algorithm**: Decision Tree Classification (Binary Classification)
+**Algoritma**: Klasifikasi Decision Tree (Klasifikasi Biner)
 
 ---
 
-## 📁 Project Structure
+## 🚀 Cara Menjalankan
 
-```
-c:\xampp\htdocs\datanalyst\
-│
-├── 📋 SCRIPTS (4 files)
-│   ├─ dt_business_understanding.py      [PART 1: EDA & Business Analysis]
-│   ├─ dt_data_preparation.py            [PART 2: Feature Engineering]
-│   ├─ dt_modeling.py                    [PART 3: Model Comparison]
-│   └─ dt_evaluation.py                  [PART 4: Business Insights] ✅ COMPLETED
-│
-├── 📊 INPUT DATA
-│   └─ jml_kejadian_bunuh_diri__des_kel.csv
-│
-├── 🗂️ OUTPUT DATA FILES
-│   ├─ X_train.csv, X_test.csv          (Feature matrices)
-│   ├─ y_train.csv, y_test.csv          (Target variables)
-│   ├─ data_processed_complete.csv      (Full processed dataset)
-│   ├─ predictions_best_model.csv       (Model predictions)
-│   ├─ feature_importance.csv           (Feature ranking)
-│   ├─ geographic_risk_mapping.csv      (Risk scores by kabupaten)
-│   ├─ kabupaten_encoding_mapping.csv   (Location encoding)
-│   └─ model_comparison_metrics.csv     (Model performance comparison)
-│
-├── 📈 VISUALIZATIONS (14 PNG files)
-│   ├─ 01_target_distribution_analysis.png
-│   ├─ 02_temporal_trends.png
-│   ├─ 03_geographic_hotspots.png
-│   ├─ 04_feature_distributions_by_class.png
-│   ├─ 05_correlation_matrix.png
-│   ├─ 06_train_test_class_distribution.png
-│   ├─ 07_model_comparison_metrics.png
-│   ├─ 08_confusion_matrix_best_model.png
-│   ├─ 09_roc_curves_comparison.png
-│   ├─ 10_feature_importance.png
-│   ├─ 11_decision_tree_structure.png
-│   ├─ 12_error_analysis.png
-│   ├─ 13_geographic_risk_map.png
-│   └─ 14_feature_category_importance.png
-│
-└── 📄 REPORTS & SUMMARIES (6 TXT files)
-    ├─ 00_business_understanding_summary.txt
-    ├─ 01_data_preparation_summary.txt
-    ├─ 02_business_recommendations.txt
-    ├─ 03_final_comprehensive_report.txt
-    ├─ 04_project_validation_checklist.txt
-    ├─ 05_project_conclusion_nextactions.txt
-    └─ 06_project_summary_statistics.csv
-```
-
----
-
-## 🚀 How to Run
-
-### Prerequisites
+### Prasyarat
 ```bash
 pip install pandas numpy matplotlib seaborn scikit-learn
 ```
 
-### Execution Order
+### Urutan Eksekusi
 
-**Step 1: Business & Data Understanding** (2-3 minutes)
+**Langkah 1: Pemahaman Bisnis & Data** (2-3 menit)
 ```bash
 python dt_business_understanding.py
 ```
-Output: EDA visualizations, dataset summary, business context
+Output: Visualisasi EDA, ringkasan dataset, konteks bisnis
 
-**Step 2: Data Preparation** (1-2 minutes)
+**Langkah 2: Persiapan Data** (1-2 menit)
 ```bash
 python dt_data_preparation.py
 ```
-Output: Engineered features, train-test split, visualizations
+Output: Fitur yang direkayasa, pembagian train-test, visualisasi
 
-**Step 3: Modeling** (2-3 minutes)
+**Langkah 3: Pemodelan** (2-3 menit)
 ```bash
 python dt_modeling.py
 ```
-Output: 5 models compared, best model selected, predictions saved
+Output: 5 model dibandingkan, model terbaik dipilih, prediksi disimpan
 
-**Step 4: Evaluation & Insights** ✅ **NOW COMPLETE!** (1-2 minutes)
+**Langkah 4: Evaluasi & Wawasan** ✅ **SUDAH SELESAI!** (1-2 menit)
 ```bash
 python dt_evaluation.py
 ```
-Output: Business recommendations, geographic risk mapping, final report
+Output: Rekomendasi bisnis, pemetaan risiko geografis, laporan final
 
-**Total Execution Time**: ~6-10 minutes
+**Total Waktu Eksekusi**: ~6-10 menit
 
 ---
 
-## 🏆 Model Performance
+## 🏆 Performa Model
 
-| Metric | Value |
+| Metrik | Nilai |
 |--------|-------|
-| **Best Model** | Decision Tree (Pruned) |
-| **Accuracy** | Calculated from model |
-| **Precision** | Minimize false alarms |
-| **Recall** | Detect actual risk areas |
-| **F1-Score** | Balance precision & recall |
-| **ROC-AUC** | Overall discrimination ability |
+| **Model Terbaik** | Decision Tree (Dipangkas) |
+| **Akurasi** | Dihitung dari model |
+| **Presisi** | Meminimalkan alarm palsu |
+| **Recall** | Mendeteksi wilayah berisiko aktual |
+| **F1-Score** | Menyeimbangkan presisi & recall |
+| **ROC-AUC** | Kemampuan diskriminasi keseluruhan |
 
 ---
 
-## 🔍 Key Findings
+## 🔍 Temuan Utama
 
-### Data Characteristics
-- **Total Records**: ~2,166
-- **Time Period**: 2019-2024 (6 years)
-- **Geographic Coverage**: 27 Kabupaten/Kota in Jawa Barat
-- **Class Imbalance**: ~7:1 (87% no cases vs 13% with cases)
+### Karakteristik Data
+- **Total Records**: ~2.166
+- **Periode Waktu**: 2019-2024 (6 tahun)
+- **Cakupan Geografis**: 27 Kabupaten/Kota di Jawa Barat
+- **Ketidakseimbangan Kelas**: ~7:1 (87% tanpa kasus vs 13% dengan kasus)
 
-### Engineered Features (17 Total)
+### Fitur yang Direkayasa (17 Total)
 
-**Temporal Features (7)**
-- `tahun` - Year indicator
-- `kasus_1tahun_lalu` - 1-year lag
-- `kasus_2tahun_lalu` - 2-year lag
-- `tren` - Trend from previous year
-- `growth_rate` - Percentage change
-- `rolling_mean_2y` - 2-year moving average
-- `rolling_max_2y` - 2-year maximum
+**Fitur Temporal (7)**
+- `tahun` - Indikator tahun
+- `kasus_1tahun_lalu` - Lag 1 tahun
+- `kasus_2tahun_lalu` - Lag 2 tahun
+- `tren` - Tren dari tahun sebelumnya
+- `growth_rate` - Perubahan persentase
+- `rolling_mean_2y` - Rata-rata bergerak 2 tahun
+- `rolling_max_2y` - Maksimum 2 tahun
 
-**Geographic Features (6)**
-- `kabupaten_encoded` - Location code
-- `jumlah_kecamatan` - Number of districts
-- `jumlah_desa` - Number of villages
-- `kasus_per_desa` - Cases per village
-- `density_score` - Cases per district
-- `total_kasus_historis` - Historical total
+**Fitur Geografis (6)**
+- `kabupaten_encoded` - Kode lokasi
+- `jumlah_kecamatan` - Jumlah kecamatan
+- `jumlah_desa` - Jumlah desa
+- `kasus_per_desa` - Kasus per desa
+- `density_score` - Kasus per kecamatan
+- `total_kasus_historis` - Total historis
 
-**Statistical Features (4)**
-- `rata_kasus` - Average cases
-- `max_kasus` - Maximum cases
-- `std_kasus` - Standard deviation
-- `severity_ratio` - Max to mean ratio
-
----
-
-## 📊 Main Insights
-
-1. **Severe Class Imbalance**: 87% no cases, 13% with cases
-   - Solution: Use `class_weight='balanced'`, focus on F1/ROC-AUC
-
-2. **Geographic Concentration**: Top 3 kabupaten have majority of cases
-   - Enables targeted intervention
-
-3. **Temporal Patterns**: Year-to-year trends identified
-   - Historical lag features highly predictive
-
-4. **Feature Importance**: 
-   - Top 10 features explain ~80% of model decisions
-   - Temporal & Geographic features both critical
-
-5. **Risk Stratification**:
-   - Tier 1: Very High Risk → Immediate action
-   - Tier 2: High Risk → Enhanced monitoring
-   - Tier 3: Medium Risk → Regular monitoring
-   - Tier 4: Low Risk → Baseline services
+**Fitur Statistik (4)**
+- `rata_kasus` - Rata-rata kasus
+- `max_kasus` - Maksimum kasus
+- `std_kasus` - Standar deviasi
+- `severity_ratio` - Rasio maksimum ke rata-rata
 
 ---
 
-## 💼 Business Recommendations
+## 📊 Wawasan Utama
 
-### Immediate Actions (Week 1-2)
-- [ ] Present findings to Dinas Kesehatan
-- [ ] Identify top 3 high-risk kabupaten
-- [ ] Deploy crisis intervention teams
-- [ ] Strengthen mental health hotlines
+1. **Ketidakseimbangan Kelas Parah**: 87% tanpa kasus, 13% dengan kasus
+   - Solusi: Gunakan `class_weight='balanced'`, fokus pada F1/ROC-AUC
 
-### Medium-term (Month 1-3)
-- [ ] Setup monitoring dashboard
-- [ ] Train local health teams
-- [ ] Establish feedback collection system
-- [ ] Begin pilot implementation
+2. **Konsentrasi Geografis**: 3 kabupaten teratas memiliki mayoritas kasus
+   - Memungkinkan intervensi yang ditargetkan
 
-### Long-term (Month 3+)
-- [ ] Roll out to all 27 kabupaten
-- [ ] Quarterly model retraining
-- [ ] Annual performance evaluation
-- [ ] Scale to national level
+3. **Pola Temporal**: Tren tahun ke tahun diidentifikasi
+   - Fitur lag historis sangat prediktif
+
+4. **Pentingnya Fitur**: 
+   - 10 fitur teratas menjelaskan ~80% keputusan model
+   - Fitur temporal & geografis sama-sama penting
+
+5. **Stratifikasi Risiko**:
+   - Tier 1: Risiko Sangat Tinggi → Tindakan segera
+   - Tier 2: Risiko Tinggi → Pemantauan ditingkatkan
+   - Tier 3: Risiko Sedang → Pemantauan teratur
+   - Tier 4: Risiko Rendah → Layanan dasar
 
 ---
 
-## ⚠️ Important Notes
+## 💼 Rekomendasi Bisnis
 
-### Handling Class Imbalance
+### Tindakan Segera (Minggu 1-2)
+- [ ] Presentasikan temuan ke Dinas Kesehatan
+- [ ] Identifikasi 3 kabupaten berisiko tinggi teratas
+- [ ] Terapkan tim intervensi krisis
+- [ ] Perkuat saluran telepon darurat kesehatan mental
+
+### Jangka Menengah (Bulan 1-3)
+- [ ] Siapkan dashboard pemantauan
+- [ ] Latih tim kesehatan lokal
+- [ ] Tetapkan sistem pengumpulan umpan balik
+- [ ] Mulai implementasi pilot
+
+### Jangka Panjang (Bulan 3+)
+- [ ] Luncurkan ke semua 27 kabupaten
+- [ ] Pelatihan ulang model setiap kuartal
+- [ ] Evaluasi performa tahunan
+- [ ] Skala ke tingkat nasional
+
+---
+
+## ⚠️ Catatan Penting
+
+### Menangani Ketidakseimbangan Kelas
 ```python
-✅ Use class_weight='balanced'
-✅ Stratified train-test split
-✅ Focus on: Precision, Recall, F1, ROC-AUC (NOT accuracy!)
-✅ Analyze False Negatives carefully (missed risks)
-✅ Implement threshold tuning for deployment
+✅ Gunakan class_weight='balanced'
+✅ Pembagian stratifikasi train-test
+✅ Fokus pada: Presisi, Recall, F1, ROC-AUC (BUKAN akurasi!)
+✅ Analisis False Negative dengan cermat (risiko terlewat)
+✅ Implementasikan penyesuaian threshold untuk deployment
 ```
 
-### False Negatives are CRITICAL
-- Risk areas missed by model need manual verification
-- Setup monitoring system for flagged false negatives
-- Don't rely solely on model predictions
+### False Negatives SANGAT PENTING
+- Wilayah berisiko yang terlewat model memerlukan verifikasi manual
+- Siapkan sistem pemantauan untuk false negative yang ditandai
+- Jangan hanya mengandalkan prediksi model
 
-### Model Limitations
-- Depends on quality and currency of input data
-- May miss emerging/new risk patterns
-- Requires human judgment for final decisions
-- Needs continuous retraining with new data
-
----
-
-## 📈 Success Metrics
-
-Monitor these KPIs:
-- **Model Accuracy**: Maintain >80% overall accuracy
-- **Recall Rate**: Detect >70% of actual risk areas
-- **Intervention Response**: Deploy within 24 hours of alert
-- **Lives Saved**: Track suicide prevention impact
-- **Community Awareness**: Monitor engagement metrics
+### Keterbatasan Model
+- Bergantung pada kualitas dan kekiniannya data input
+- Mungkin melewatkan pola risiko yang muncul/baru
+- Memerlukan penilaian manusia untuk keputusan final
+- Memerlukan pelatihan ulang berkelanjutan dengan data baru
 
 ---
 
-## 🔄 Continuous Improvement
+## 📈 Metrik Kesuksesan
 
-**Quarterly**: Collect field feedback, update dashboard
-**Semi-annually**: Retrain model with new data
-**Annually**: Full model evaluation, strategic review
-**As-needed**: Adjust thresholds, expand features
-
----
-
-## 📞 Support & Contact
-
-For questions, improvements, or implementation support:
-- Contact development team
-- Email: [your email]
-- Phone: [your phone]
+Pantau KPI berikut:
+- **Akurasi Model**: Pertahankan >80% akurasi keseluruhan
+- **Tingkat Recall**: Deteksi >70% wilayah berisiko aktual
+- **Respons Intervensi**: Terapkan dalam 24 jam setelah peringatan
+- **Nyawa yang Diselamatkan**: Lacak dampak pencegahan bunuh diri
+- **Kesadaran Masyarakat**: Pantau metrik keterlibatan
 
 ---
 
-## 📋 File Checklist
+## 🔄 Peningkatan Berkelanjutan
 
-Before running, verify these files exist:
-- [ ] `jml_kejadian_bunuh_diri__des_kel.csv` (input data)
+**Setiap Kuartal**: Kumpulkan umpan balik lapangan, perbarui dashboard
+**Semi-tahunan**: Latih ulang model dengan data baru
+**Tahunan**: Evaluasi model penuh, tinjauan strategis
+**Sesuai kebutuhan**: Sesuaikan threshold, perluas fitur
+
+---
+
+## 📞 Dukungan & Kontak
+
+Untuk pertanyaan, perbaikan, atau dukungan implementasi:
+- Hubungi tim pengembangan
+- Email: [email Anda]
+- Telepon: [telepon Anda]
+
+---
+
+## 📋 Daftar Periksa File
+
+Sebelum menjalankan, verifikasi file-file ini ada:
+- [ ] `jml_kejadian_bunuh_diri__des_kel.csv` (data input)
 - [ ] `dt_business_understanding.py`
 - [ ] `dt_data_preparation.py`
 - [ ] `dt_modeling.py`
 - [ ] `dt_evaluation.py`
 
-After running, verify these files are generated:
+Setelah menjalankan, verifikasi file-file ini dihasilkan:
 - [ ] X_train.csv, X_test.csv
 - [ ] y_train.csv, y_test.csv
 - [ ] data_processed_complete.csv
 - [ ] predictions_best_model.csv
 - [ ] geographic_risk_mapping.csv
-- [ ] 14 PNG visualization files
-- [ ] 6 report TXT files
+- [ ] 14 file visualisasi PNG
+- [ ] 6 file laporan TXT
 
 ---
 
-## 🎓 Learning Outcomes
+## 🎓 Hasil Pembelajaran
 
-**After completing this project, you will understand:**
-✅ End-to-end machine learning workflow (CRISP-DM)
-✅ Feature engineering techniques for time-series data
-✅ Handling imbalanced classification problems
-✅ Decision Tree model development & interpretation
-✅ Business-focused model evaluation
-✅ Translating technical results into recommendations
-✅ Geographic data analysis & visualization
-✅ Comprehensive project documentation
-
----
-
-## 📚 References
-
-- Scikit-learn Documentation: https://scikit-learn.org/
-- Decision Tree Theory: [Insert reference]
-- Class Imbalance Techniques: [Insert reference]
-- CRISP-DM Framework: [Insert reference]
+**Setelah menyelesaikan proyek ini, Anda akan memahami:**
+✅ Alur kerja machine learning end-to-end (CRISP-DM)
+✅ Teknik rekayasa fitur untuk data time-series
+✅ Menangani masalah klasifikasi yang tidak seimbang
+✅ Pengembangan & interpretasi model Decision Tree
+✅ Evaluasi model berfokus bisnis
+✅ Menerjemahkan hasil teknis menjadi rekomendasi
+✅ Analisis & visualisasi data geografis
+✅ Dokumentasi proyek yang komprehensif
 
 ---
 
-**Project Status**: ✅ **COMPLETE & PRODUCTION READY**
+## 📚 Referensi
 
-Generated: October 22, 2025
-Version: 1.0
-Status: Fully Documented
+- Dokumentasi Scikit-learn: https://scikit-learn.org/
+- Teori Decision Tree: [Masukkan referensi]
+- Teknik Ketidakseimbangan Kelas: [Masukkan referensi]
+- Framework CRISP-DM: [Masukkan referensi]
 
 ---
 
-*"Data-driven decisions save lives. This model is a step toward evidence-based mental health policy in Jawa Barat."*
+**Status Proyek**: ✅ **SELESAI & SIAP PRODUKSI**
+
+Dihasilkan: 22 Oktober 2025
+Versi: 1.0
+Status: Terdokumentasi Sepenuhnya
+
+---
+
+*"Keputusan berbasis data menyelamatkan nyawa. Model ini adalah langkah menuju kebijakan kesehatan mental berbasis bukti di Jawa Barat."*
