@@ -213,7 +213,7 @@ Setelah menjalankan, verifikasi file-file ini dihasilkan:
 
 ---
 
-## � Struktur Decision Tree Model
+##  Struktur Decision Tree Model
 
 Berikut adalah visualisasi struktur Decision Tree yang digunakan untuk prediksi risiko:
 
