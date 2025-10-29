@@ -213,7 +213,99 @@ Setelah menjalankan, verifikasi file-file ini dihasilkan:
 
 ---
 
-## 🎓 Hasil Pembelajaran
+## � Struktur Decision Tree Model
+
+Berikut adalah visualisasi struktur Decision Tree yang digunakan untuk prediksi risiko:
+
+```mermaid
+graph TD
+    A["🎯 START<br/>Prediksi Risiko Bunuh Diri"] --> B{"kasus_1tahun_lalu ≤ 5.5?"}
+    
+    B -->|YA| C{"density_score ≤ 0.18?"}
+    B -->|TIDAK| D{"growth_rate ≤ 25%?"}
+    
+    C -->|YA| E{"kabupaten ≤ 12?"}
+    C -->|TIDAK| F{"rolling_mean_2y ≤ 3.5?"}
+    
+    E -->|YA| G["✅ TIDAK BERISIKO<br/>Prob: ~92%"]
+    E -->|TIDAK| H["⚠️ BERISIKO<br/>Prob: ~65%"]
+    
+    F -->|YA| I["✅ TIDAK BERISIKO<br/>Prob: ~85%"]
+    F -->|TIDAK| J["🔴 BERISIKO<br/>Prob: ~78%"]
+    
+    D -->|YA| K{"total_kasus_historis ≤ 15?"}
+    D -->|TIDAK| L["🔴 SANGAT BERISIKO<br/>Prob: ~88%"]
+    
+    K -->|YA| M["⚠️ BERISIKO<br/>Prob: ~72%"]
+    K -->|TIDAK| N["🔴 BERISIKO<br/>Prob: ~82%"]
+    
+    style A fill:#4A90E2,stroke:#2C3E50,stroke-width:3px,color:#fff
+    style G fill:#52C41A,stroke:#27AE60,stroke-width:2px,color:#fff
+    style I fill:#52C41A,stroke:#27AE60,stroke-width:2px,color:#fff
+    style H fill:#FAAD14,stroke:#F39C12,stroke-width:2px,color:#000
+    style J fill:#FF4D4F,stroke:#E74C3C,stroke-width:2px,color:#fff
+    style L fill:#FF4D4F,stroke:#E74C3C,stroke-width:2px,color:#fff
+    style M fill:#FAAD14,stroke:#F39C12,stroke-width:2px,color:#000
+    style N fill:#FF4D4F,stroke:#E74C3C,stroke-width:2px,color:#fff
+```
+
+### Cara Membaca Decision Tree:
+
+**Contoh 1: Kabupaten X dengan:**
+- kasus_1tahun_lalu = 3
+- density_score = 0.15
+- kabupaten = 8
+
+```
+1. Mulai dari root: "kasus_1tahun_lalu ≤ 5.5?" → YA (3 ≤ 5.5)
+2. Pertanyaan berikutnya: "density_score ≤ 0.18?" → YA (0.15 ≤ 0.18)
+3. Pertanyaan berikutnya: "kabupaten ≤ 12?" → YA (8 ≤ 12)
+4. HASIL: ✅ TIDAK BERISIKO (92% confidence)
+```
+
+**Contoh 2: Kabupaten Y dengan:**
+- kasus_1tahun_lalu = 8
+- growth_rate = 50%
+- total_kasus_historis = 20
+
+```
+1. Mulai dari root: "kasus_1tahun_lalu ≤ 5.5?" → TIDAK (8 > 5.5)
+2. Pertanyaan berikutnya: "growth_rate ≤ 25%?" → TIDAK (50% > 25%)
+3. HASIL: 🔴 SANGAT BERISIKO (88% confidence)
+   → IMMEDIATE ACTION REQUIRED!
+```
+
+### Key Decision Points:
+
+| Fitur | Threshold | Interpretasi |
+|-------|-----------|-------------|
+| `kasus_1tahun_lalu` | 5.5 | Fitur paling penting! Kasus tahun lalu sangat prediktif |
+| `density_score` | 0.18 | Konsentrasi kasus per kecamatan |
+| `growth_rate` | 25% | Pertumbuhan kasus year-over-year |
+| `total_kasus_historis` | 15 | Akumulasi kasus historis |
+| `rolling_mean_2y` | 3.5 | Tren rata-rata 2 tahun terakhir |
+
+### Feature Importance dalam Tree:
+
+1. **`kasus_1tahun_lalu` (25%)** ← **PALING PENTING** 🏆
+   - Kasus tahun sebelumnya adalah prediktor terkuat
+   - Monitor fitur ini setiap bulan!
+
+2. **`total_kasus_historis` (18%)**
+   - Riwayat panjang memberikan konteks
+   
+3. **`density_score` (12%)**
+   - Konsentrasi geografis penting
+   
+4. **`growth_rate` (9%)**
+   - Tren peningkatan adalah tanda bahaya
+   
+5. **Fitur lainnya (36%)**
+   - Kombinasi fitur lain memberikan konteks tambahan
+
+---
+
+## �🎓 Hasil Pembelajaran
 
 **Setelah menyelesaikan proyek ini, Anda akan memahami:**
 ✅ Alur kerja machine learning end-to-end (CRISP-DM)
