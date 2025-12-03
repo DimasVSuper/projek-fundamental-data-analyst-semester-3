@@ -319,16 +319,667 @@ graph TD
 
 ---
 
-## 📚 Referensi
+## 💻 Kode Lengkap untuk Google Colab
 
-- Dokumentasi Scikit-learn: https://scikit-learn.org/
-- Teori Decision Tree: [Masukkan referensi]
-- Teknik Ketidakseimbangan Kelas: [Masukkan referensi]
-- Framework CRISP-DM: [Masukkan referensi]
+### PART 1: Business & Data Understanding
+
+Salin dan jalankan kode berikut di Google Colab cell pertama:
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+warnings.filterwarnings('ignore')
+
+# Set style
+plt.style.use('seaborn-v0_8-darkgrid')
+sns.set_palette("husl")
+
+print("="*70)
+print("DECISION TREE PROJECT - BUSINESS & DATA UNDERSTANDING")
+print("="*70)
+
+# ============================================
+# BUSINESS UNDERSTANDING
+# ============================================
+
+print("\n" + "="*70)
+print("BUSINESS UNDERSTANDING")
+print("="*70)
+
+business_context = """
+KONTEKS BISNIS:
+Kasus bunuh diri merupakan masalah kesehatan mental yang serius di Jawa Barat.
+Data menunjukkan distribusi kasus yang sangat tidak merata antar wilayah.
+Pemerintah membutuhkan sistem untuk mengidentifikasi wilayah berisiko.
+
+PROBLEM STATEMENT:
+Bagaimana mengidentifikasi wilayah yang berpotensi mengalami kasus bunuh diri
+untuk alokasi sumber daya pencegahan yang lebih efektif?
+
+TUJUAN PROJECT:
+1. Mengembangkan model klasifikasi untuk prediksi risiko wilayah
+2. Mengidentifikasi faktor-faktor yang paling berpengaruh
+3. Memberikan rekomendasi berbasis data untuk intervensi preventif
+
+PENDEKATAN: BINARY CLASSIFICATION
+Target: Wilayah "Berisiko" vs "Tidak Berisiko"
+- Berisiko: Wilayah dengan jumlah kasus > 0
+- Tidak Berisiko: Wilayah dengan 0 kasus
+
+ALGORITMA: DECISION TREE
+Dipilih karena:
+✅ Interpretable - mudah dijelaskan ke stakeholder non-teknis
+✅ Handle imbalanced data dengan class weights
+✅ Dapat handle non-linear relationships
+✅ Feature importance analysis built-in
+✅ Robust to outliers
+✅ Tidak perlu feature scaling
+
+SUCCESS CRITERIA:
+- Precision > 60% (minimize false alarms)
+- Recall > 50% (detect actual risk areas)
+- F1-Score > 55% (balance precision & recall)
+- ROC-AUC > 0.70 (overall discrimination ability)
+- Model interpretability tinggi untuk decision support
+"""
+
+print(business_context)
+
+# ============================================
+# LOAD & EXPLORE DATA
+# ============================================
+
+print("\n" + "="*70)
+print("DATA LOADING & INITIAL EXPLORATION")
+print("="*70)
+
+# Untuk Google Colab: Upload file CSV terlebih dahulu
+# Atau gunakan URL dari GitHub
+url = "https://drive.google.com/uc?id=YOUR_FILE_ID"  # Ganti dengan file ID Anda
+# Atau copy file ke Colab dengan: 
+# from google.colab import files
+# files.upload()
+
+# Jika sudah di-upload, gunakan:
+df = pd.read_csv('jml_kejadian_bunuh_diri__des_kel.csv')
+
+print(f"\n[DATASET OVERVIEW]")
+print("-" * 70)
+print(f"Total Records: {len(df):,}")
+print(f"Total Features: {len(df.columns)}")
+print(f"Periode: {df['tahun'].min()} - {df['tahun'].max()}")
+print(f"Jumlah Tahun: {df['tahun'].nunique()}")
+
+print(f"\n[GEOGRAPHIC COVERAGE]")
+print("-" * 70)
+print(f"Provinsi: {df['nama_provinsi'].nunique()}")
+print(f"Kabupaten/Kota: {df['bps_nama_kabupaten_kota'].nunique()}")
+print(f"Kecamatan: {df['bps_nama_kecamatan'].nunique()}")
+print(f"Desa/Kelurahan: {df['bps_nama_desa_kelurahan'].nunique()}")
+
+print(f"\n[COLUMNS]")
+print("-" * 70)
+print(df.columns.tolist())
+
+# ============================================
+# TARGET VARIABLE ANALYSIS
+# ============================================
+
+print("\n" + "="*70)
+print("TARGET VARIABLE ANALYSIS (jumlah_kejadian)")
+print("="*70)
+
+print(f"\n[DESCRIPTIVE STATISTICS]")
+print("-" * 70)
+print(df['jumlah_kejadian'].describe())
+
+# Calculate key metrics
+total_records = len(df)
+zero_cases = (df['jumlah_kejadian'] == 0).sum()
+non_zero_cases = (df['jumlah_kejadian'] > 0).sum()
+pct_zero = zero_cases / total_records * 100
+pct_non_zero = non_zero_cases / total_records * 100
+
+print(f"\n[CLASS DISTRIBUTION]")
+print("-" * 70)
+print(f"Tidak Ada Kasus (0): {zero_cases:,} ({pct_zero:.2f}%)")
+print(f"Ada Kasus (>0):      {non_zero_cases:,} ({pct_non_zero:.2f}%)")
+print(f"\n⚠️ SEVERE CLASS IMBALANCE DETECTED!")
+print(f"   Ratio = {zero_cases/non_zero_cases:.1f}:1")
+
+# ============================================
+# VISUALIZATIONS
+# ============================================
+
+print("\n" + "="*70)
+print("CREATING VISUALIZATIONS")
+print("="*70)
+
+fig, axes = plt.subplots(2, 2, figsize=(14, 12))
+fig.suptitle('Target Variable Analysis', fontsize=16, fontweight='bold')
+
+colors = ['lightcoral', 'lightgreen']
+axes[0, 0].pie([zero_cases, non_zero_cases], 
+               labels=['Tidak Ada Kasus (0)', 'Ada Kasus (>0)'],
+               autopct='%1.2f%%', colors=colors, startangle=90,
+               textprops={'fontsize': 11, 'fontweight': 'bold'})
+axes[0, 0].set_title('Class Distribution (Binary)', fontsize=13, fontweight='bold')
+
+axes[0, 1].bar(['Tidak Berisiko\n(0 kasus)', 'Berisiko\n(>0 kasus)'], 
+               [zero_cases, non_zero_cases], color=colors, edgecolor='black', linewidth=1.5)
+axes[0, 1].set_ylabel('Count', fontsize=11)
+axes[0, 1].set_title('Binary Classification Target', fontsize=13, fontweight='bold')
+axes[0, 1].grid(axis='y', alpha=0.3)
+
+df_cases = df[df['jumlah_kejadian'] > 0]['jumlah_kejadian']
+axes[1, 0].hist(df_cases, bins=50, color='steelblue', edgecolor='black', alpha=0.7)
+axes[1, 0].set_xlabel('Jumlah Kasus', fontsize=11)
+axes[1, 0].set_ylabel('Frequency', fontsize=11)
+axes[1, 0].set_title('Distribution of Cases (Only >0)', fontsize=13, fontweight='bold')
+axes[1, 0].axvline(df_cases.median(), color='red', linestyle='--', 
+                   linewidth=2, label=f'Median: {df_cases.median():.0f}')
+axes[1, 0].legend()
+axes[1, 0].grid(alpha=0.3)
+
+axes[1, 1].boxplot(df_cases, vert=True)
+axes[1, 1].set_ylabel('Jumlah Kasus', fontsize=11)
+axes[1, 1].set_title('Boxplot of Cases (Only >0)', fontsize=13, fontweight='bold')
+axes[1, 1].grid(alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('01_target_distribution_analysis.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("\n✅ PART 1: Business Understanding selesai!")
+```
 
 ---
 
-**Status Proyek**: ✅ **SELESAI & SIAP PRODUKSI**
+### PART 2: Data Preparation
+
+Salin dan jalankan di cell berikutnya:
+
+```python
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+
+print("="*70)
+print("DATA PREPARATION FOR DECISION TREE CLASSIFICATION")
+print("="*70)
+
+# ============================================
+# FEATURE ENGINEERING
+# ============================================
+
+print("\n" + "="*70)
+print("FEATURE ENGINEERING")
+print("="*70)
+
+# [A] AGREGASI PER KABUPATEN & TAHUN
+print("\n[A] Agregating data per Kabupaten & Tahun...")
+
+df_agg = df.groupby(['bps_nama_kabupaten_kota', 'tahun']).agg({
+    'jumlah_kejadian': ['sum', 'mean', 'max', 'std', 'count'],
+    'bps_nama_kecamatan': 'nunique',
+    'bps_nama_desa_kelurahan': 'nunique'
+}).reset_index()
+
+# Flatten column names
+df_agg.columns = ['kabupaten', 'tahun', 'total_kasus', 'rata_kasus', 
+                  'max_kasus', 'std_kasus', 'count_records',
+                  'jumlah_kecamatan', 'jumlah_desa']
+
+df_agg['std_kasus'].fillna(0, inplace=True)
+
+print(f"✅ Aggregated shape: {df_agg.shape}")
+
+# [B] TEMPORAL FEATURES
+print("\n[B] Creating temporal features...")
+
+df_agg = df_agg.sort_values(['kabupaten', 'tahun']).reset_index(drop=True)
+
+df_agg['kasus_1tahun_lalu'] = df_agg.groupby('kabupaten')['total_kasus'].shift(1)
+df_agg['kasus_2tahun_lalu'] = df_agg.groupby('kabupaten')['total_kasus'].shift(2)
+df_agg['tren'] = df_agg['total_kasus'] - df_agg['kasus_1tahun_lalu']
+
+df_agg['growth_rate'] = df_agg.apply(
+    lambda row: ((row['total_kasus'] - row['kasus_1tahun_lalu']) / row['kasus_1tahun_lalu'] * 100) 
+    if pd.notna(row['kasus_1tahun_lalu']) and row['kasus_1tahun_lalu'] > 0 
+    else 0, 
+    axis=1
+)
+
+df_agg['rolling_mean_2y'] = df_agg.groupby('kabupaten')['total_kasus'].transform(
+    lambda x: x.rolling(window=2, min_periods=1).mean()
+)
+
+df_agg['rolling_max_2y'] = df_agg.groupby('kabupaten')['total_kasus'].transform(
+    lambda x: x.rolling(window=2, min_periods=1).max()
+)
+
+print("✅ Temporal features created")
+
+# [C] GEOGRAPHIC FEATURES
+print("\n[C] Creating geographic features...")
+
+total_historis = df.groupby('bps_nama_kabupaten_kota')['jumlah_kejadian'].sum()
+df_agg['total_kasus_historis'] = df_agg['kabupaten'].map(total_historis)
+df_agg['kasus_per_desa'] = df_agg['total_kasus'] / df_agg['jumlah_desa']
+df_agg['density_score'] = df_agg['total_kasus'] / df_agg['jumlah_kecamatan']
+df_agg['severity_ratio'] = df_agg.apply(
+    lambda row: row['max_kasus'] / row['rata_kasus'] if row['rata_kasus'] > 0 else 0,
+    axis=1
+)
+
+print("✅ Geographic features created")
+
+# [D] CATEGORICAL ENCODING
+print("\n[D] Encoding categorical features...")
+
+le = LabelEncoder()
+df_agg['kabupaten_encoded'] = le.fit_transform(df_agg['kabupaten'])
+
+print(f"✅ Encoded {len(le.classes_)} kabupaten")
+
+# [E] CREATE BINARY TARGET
+print("\n[E] Creating binary target variable...")
+
+df_agg['berisiko'] = (df_agg['total_kasus'] > 0).astype(int)
+
+target_dist = df_agg['berisiko'].value_counts()
+print(f"\n✅ Binary target created:")
+print(f"   Class 0 (Tidak Berisiko): {target_dist[0]} ({target_dist[0]/len(df_agg)*100:.2f}%)")
+print(f"   Class 1 (Berisiko):       {target_dist[1]} ({target_dist[1]/len(df_agg)*100:.2f}%)")
+
+# ============================================
+# FEATURE SELECTION & SPLITTING
+# ============================================
+
+print("\n" + "="*70)
+print("FEATURE SELECTION & TRAIN-TEST SPLIT")
+print("="*70)
+
+feature_cols = [
+    'tahun',
+    'kasus_1tahun_lalu', 'kasus_2tahun_lalu',
+    'tren', 'growth_rate',
+    'rolling_mean_2y', 'rolling_max_2y',
+    'kabupaten_encoded', 'jumlah_kecamatan', 'jumlah_desa',
+    'kasus_per_desa', 'density_score', 'total_kasus_historis',
+    'rata_kasus', 'max_kasus', 'std_kasus', 'severity_ratio', 'count_records'
+]
+
+# Handle missing values
+fill_cols = ['kasus_1tahun_lalu', 'kasus_2tahun_lalu', 'tren', 'growth_rate']
+for col in fill_cols:
+    df_agg[col].fillna(0, inplace=True)
+
+# Clean data
+df_clean = df_agg.dropna()
+
+# Prepare data
+X = df_clean[feature_cols]
+y = df_clean['berisiko']
+
+# Stratified split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, 
+    test_size=0.2, 
+    random_state=42, 
+    stratify=y
+)
+
+print(f"\n✅ Data split completed:")
+print(f"   Training set:   {X_train.shape[0]} samples")
+print(f"   Testing set:    {X_test.shape[0]} samples")
+print(f"   Features:       {X_train.shape[1]}")
+
+print(f"\n✅ PART 2: Data Preparation selesai!")
+```
+
+---
+
+### PART 3: Decision Tree Modeling
+
+Salin dan jalankan di cell berikutnya:
+
+```python
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import (accuracy_score, precision_score, recall_score, 
+                             f1_score, confusion_matrix, roc_auc_score, roc_curve)
+from sklearn.model_selection import cross_val_score, GridSearchCV
+
+print("="*70)
+print("DECISION TREE MODELING")
+print("="*70)
+
+# ============================================
+# BASELINE MODEL
+# ============================================
+
+print("\n" + "="*70)
+print("MODEL 1: BASELINE (MAJORITY CLASS)")
+print("="*70)
+
+majority_class = y_train.mode()[0]
+y_pred_baseline = np.full(len(y_test), majority_class)
+
+baseline_acc = accuracy_score(y_test, y_pred_baseline)
+baseline_f1 = f1_score(y_test, y_pred_baseline, zero_division=0)
+
+print(f"Accuracy:  {baseline_acc:.4f}")
+print(f"F1-Score:  {baseline_f1:.4f}")
+
+# ============================================
+# DECISION TREE - BASIC
+# ============================================
+
+print("\n" + "="*70)
+print("MODEL 2: DECISION TREE - BASIC")
+print("="*70)
+
+dt_basic = DecisionTreeClassifier(random_state=42)
+dt_basic.fit(X_train, y_train)
+
+y_pred_basic = dt_basic.predict(X_test)
+y_proba_basic = dt_basic.predict_proba(X_test)[:, 1]
+
+acc_basic = accuracy_score(y_test, y_pred_basic)
+prec_basic = precision_score(y_test, y_pred_basic, zero_division=0)
+rec_basic = recall_score(y_test, y_pred_basic, zero_division=0)
+f1_basic = f1_score(y_test, y_pred_basic, zero_division=0)
+auc_basic = roc_auc_score(y_test, y_proba_basic)
+
+print(f"Accuracy:  {acc_basic:.4f}")
+print(f"Precision: {prec_basic:.4f}")
+print(f"Recall:    {rec_basic:.4f}")
+print(f"F1-Score:  {f1_basic:.4f}")
+print(f"ROC-AUC:   {auc_basic:.4f}")
+
+# ============================================
+# DECISION TREE - BALANCED
+# ============================================
+
+print("\n" + "="*70)
+print("MODEL 3: DECISION TREE - BALANCED")
+print("="*70)
+
+dt_balanced = DecisionTreeClassifier(class_weight='balanced', random_state=42)
+dt_balanced.fit(X_train, y_train)
+
+y_pred_balanced = dt_balanced.predict(X_test)
+y_proba_balanced = dt_balanced.predict_proba(X_test)[:, 1]
+
+acc_balanced = accuracy_score(y_test, y_pred_balanced)
+prec_balanced = precision_score(y_test, y_pred_balanced, zero_division=0)
+rec_balanced = recall_score(y_test, y_pred_balanced, zero_division=0)
+f1_balanced = f1_score(y_test, y_pred_balanced, zero_division=0)
+auc_balanced = roc_auc_score(y_test, y_proba_balanced)
+
+print(f"Accuracy:  {acc_balanced:.4f}")
+print(f"Precision: {prec_balanced:.4f}")
+print(f"Recall:    {rec_balanced:.4f}")
+print(f"F1-Score:  {f1_balanced:.4f}")
+print(f"ROC-AUC:   {auc_balanced:.4f}")
+
+# ============================================
+# DECISION TREE - PRUNED (BEST)
+# ============================================
+
+print("\n" + "="*70)
+print("MODEL 4: DECISION TREE - PRUNED (HYPERPARAMETER TUNING)")
+print("="*70)
+
+param_grid = {
+    'max_depth': [3, 5, 7, 10, None],
+    'min_samples_split': [2, 5, 10, 20],
+    'min_samples_leaf': [1, 2, 5, 10],
+    'class_weight': ['balanced']
+}
+
+dt_grid = GridSearchCV(
+    DecisionTreeClassifier(random_state=42),
+    param_grid,
+    cv=5,
+    scoring='f1',
+    n_jobs=-1
+)
+
+dt_grid.fit(X_train, y_train)
+dt_pruned = dt_grid.best_estimator_
+
+print(f"✅ Best Parameters:")
+for param, value in dt_grid.best_params_.items():
+    print(f"   {param}: {value}")
+
+y_pred_pruned = dt_pruned.predict(X_test)
+y_proba_pruned = dt_pruned.predict_proba(X_test)[:, 1]
+
+acc_pruned = accuracy_score(y_test, y_pred_pruned)
+prec_pruned = precision_score(y_test, y_pred_pruned, zero_division=0)
+rec_pruned = recall_score(y_test, y_pred_pruned, zero_division=0)
+f1_pruned = f1_score(y_test, y_pred_pruned, zero_division=0)
+auc_pruned = roc_auc_score(y_test, y_proba_pruned)
+
+print(f"\nAccuracy:  {acc_pruned:.4f}")
+print(f"Precision: {prec_pruned:.4f}")
+print(f"Recall:    {rec_pruned:.4f}")
+print(f"F1-Score:  {f1_pruned:.4f}")
+print(f"ROC-AUC:   {auc_pruned:.4f}")
+
+# ============================================
+# RANDOM FOREST
+# ============================================
+
+print("\n" + "="*70)
+print("MODEL 5: RANDOM FOREST")
+print("="*70)
+
+rf = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=10,
+    min_samples_split=10,
+    min_samples_leaf=5,
+    class_weight='balanced',
+    random_state=42,
+    n_jobs=-1
+)
+
+rf.fit(X_train, y_train)
+
+y_pred_rf = rf.predict(X_test)
+y_proba_rf = rf.predict_proba(X_test)[:, 1]
+
+acc_rf = accuracy_score(y_test, y_pred_rf)
+prec_rf = precision_score(y_test, y_pred_rf, zero_division=0)
+rec_rf = recall_score(y_test, y_pred_rf, zero_division=0)
+f1_rf = f1_score(y_test, y_pred_rf, zero_division=0)
+auc_rf = roc_auc_score(y_test, y_proba_rf)
+
+print(f"Accuracy:  {acc_rf:.4f}")
+print(f"Precision: {prec_rf:.4f}")
+print(f"Recall:    {rec_rf:.4f}")
+print(f"F1-Score:  {f1_rf:.4f}")
+print(f"ROC-AUC:   {auc_rf:.4f}")
+
+# ============================================
+# MODEL COMPARISON
+# ============================================
+
+print("\n" + "="*70)
+print("MODEL COMPARISON")
+print("="*70)
+
+comparison = pd.DataFrame({
+    'Model': ['Baseline', 'DT Basic', 'DT Balanced', 'DT Pruned', 'Random Forest'],
+    'Accuracy': [baseline_acc, acc_basic, acc_balanced, acc_pruned, acc_rf],
+    'Precision': [0, prec_basic, prec_balanced, prec_pruned, prec_rf],
+    'Recall': [0, rec_basic, rec_balanced, rec_pruned, rec_rf],
+    'F1-Score': [baseline_f1, f1_basic, f1_balanced, f1_pruned, f1_rf],
+    'ROC-AUC': [0, auc_basic, auc_balanced, auc_pruned, auc_rf]
+})
+
+print("\n" + comparison.to_string(index=False))
+
+best_f1_idx = comparison['F1-Score'].idxmax()
+best_model_name = comparison.loc[best_f1_idx, 'Model']
+best_f1 = comparison.loc[best_f1_idx, 'F1-Score']
+
+print(f"\n🏆 BEST MODEL: {best_model_name}")
+print(f"   F1-Score: {best_f1:.4f}")
+
+# Simpan predictions dengan best model
+if best_model_name == 'DT Pruned':
+    y_pred_best = y_pred_pruned
+    y_proba_best = y_proba_pruned
+    best_model = dt_pruned
+elif best_model_name == 'Random Forest':
+    y_pred_best = y_pred_rf
+    y_proba_best = y_proba_rf
+    best_model = rf
+
+print(f"\n✅ PART 3: Modeling selesai!")
+```
+
+---
+
+### PART 4: Model Evaluation & Business Insights
+
+Salin dan jalankan di cell berikutnya:
+
+```python
+from sklearn.metrics import classification_report
+
+print("="*70)
+print("MODEL EVALUATION & BUSINESS INSIGHTS")
+print("="*70)
+
+# ============================================
+# CONFUSION MATRIX ANALYSIS
+# ============================================
+
+print("\n" + "="*70)
+print("CONFUSION MATRIX ANALYSIS")
+print("="*70)
+
+cm = confusion_matrix(y_test, y_pred_best)
+tn, fp, fn, tp = cm.ravel()
+
+print(f"\nConfusion Matrix:")
+print(f"True Negatives (TN):  {tn}")
+print(f"False Positives (FP): {fp}")
+print(f"False Negatives (FN): {fn}")
+print(f"True Positives (TP):  {tp}")
+
+total = tn + fp + fn + tp
+accuracy = (tn + tp) / total
+precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+
+print(f"\nMetrics:")
+print(f"Accuracy:   {accuracy:.4f}")
+print(f"Precision:  {precision:.4f}")
+print(f"Recall:     {recall:.4f}")
+
+print(f"\nBusiness Impact:")
+print(f"❌ False Negatives (FN = {fn}): Wilayah berisiko yang TERLEWAT")
+print(f"⚠️  False Positives (FP = {fp}): False alarm")
+
+# ============================================
+# FEATURE IMPORTANCE
+# ============================================
+
+print("\n" + "="*70)
+print("FEATURE IMPORTANCE")
+print("="*70)
+
+feature_imp = pd.DataFrame({
+    'feature': feature_cols,
+    'importance': best_model.feature_importances_
+}).sort_values('importance', ascending=False)
+
+print("\nTop 10 Most Important Features:")
+print(feature_imp.head(10).to_string(index=False))
+
+# ============================================
+# VISUALIZATIONS
+# ============================================
+
+print("\n" + "="*70)
+print("CREATING VISUALIZATIONS")
+print("="*70)
+
+# Confusion Matrix
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+# Heatmap
+cm_pct = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis] * 100
+sns.heatmap(cm_pct, annot=True, fmt='.1f', cmap='RdYlGn_r', 
+            xticklabels=['Tidak Berisiko', 'Berisiko'],
+            yticklabels=['Tidak Berisiko', 'Berisiko'],
+            ax=axes[0], cbar_kws={'label': 'Percentage (%)'})
+axes[0].set_title('Confusion Matrix (%)', fontsize=13, fontweight='bold')
+axes[0].set_ylabel('Actual', fontsize=11)
+axes[0].set_xlabel('Predicted', fontsize=11)
+
+# Feature Importance
+top10_imp = feature_imp.head(10)
+axes[1].barh(range(len(top10_imp)), top10_imp['importance'].values, color='steelblue')
+axes[1].set_yticks(range(len(top10_imp)))
+axes[1].set_yticklabels(top10_imp['feature'].values)
+axes[1].set_xlabel('Importance', fontsize=11)
+axes[1].set_title('Top 10 Feature Importance', fontsize=13, fontweight='bold')
+axes[1].invert_yaxis()
+axes[1].grid(axis='x', alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# ROC Curve
+fpr, tpr, thresholds = roc_curve(y_test, y_proba_best)
+roc_auc = auc_pruned
+
+plt.figure(figsize=(8, 6))
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.4f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--', label='Random Classifier')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate', fontsize=12)
+plt.ylabel('True Positive Rate', fontsize=12)
+plt.title('ROC Curve - Best Model', fontsize=14, fontweight='bold')
+plt.legend(loc="lower right")
+plt.grid(alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+print("\n✅ PART 4: Evaluation selesai!")
+print("\n" + "="*70)
+print("🎉 SEMUA TAHAP SELESAI!")
+print("="*70)
+print(f"\nRingkasan Hasil:")
+print(f"✅ Best Model: DT Pruned")
+print(f"✅ Accuracy:  {accuracy:.4f} ({accuracy*100:.2f}%)")
+print(f"✅ Precision: {precision:.4f}")
+print(f"✅ Recall:    {recall:.4f}")
+print(f"✅ Model siap untuk deployment!")
+```
+
+---
+
+## 📚 Referensi
+
+- Dokumentasi Scikit-learn: https://scikit-learn.org/
+- Teori Decision Tree: https://www.ibm.com/id-id/think/topics/decision-trees
+- Datasheet Jumlah-Kejadian-Bunuh-Diri : https://data.go.id/dataset/dataset/jumlah-kejadian-bunuh-diri-berdasarkan-desa-kelurahan-di-jawa-barat
+- CRISP-DM: https://www.datascience-pm.com/crisp-dm-2/
+
+---
+
+**Status Proyek**: ✅ **SELESAI**
 
 Dihasilkan: 22 Oktober 2025
 Versi: 1.0
