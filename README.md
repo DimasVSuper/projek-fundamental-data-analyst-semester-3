@@ -121,22 +121,22 @@ Output: Rekomendasi bisnis, pemetaan risiko geografis, laporan final
 ## 💼 Rekomendasi Bisnis
 
 ### Tindakan Segera (Minggu 1-2)
-- [ ] Presentasikan temuan ke Dinas Kesehatan
-- [ ] Identifikasi 3 kabupaten berisiko tinggi teratas
-- [ ] Terapkan tim intervensi krisis
-- [ ] Perkuat saluran telepon darurat kesehatan mental
+- Presentasikan temuan ke Dinas Kesehatan
+- Identifikasi 3 kabupaten berisiko tinggi teratas
+- Terapkan tim intervensi krisis
+- Perkuat saluran telepon darurat kesehatan mental
 
 ### Jangka Menengah (Bulan 1-3)
-- [ ] Siapkan dashboard pemantauan
-- [ ] Latih tim kesehatan lokal
-- [ ] Tetapkan sistem pengumpulan umpan balik
-- [ ] Mulai implementasi pilot
+- Siapkan dashboard pemantauan
+- Latih tim kesehatan lokal
+- Tetapkan sistem pengumpulan umpan balik
+- Mulai implementasi pilot
 
 ### Jangka Panjang (Bulan 3+)
-- [ ] Luncurkan ke semua 27 kabupaten
-- [ ] Pelatihan ulang model setiap kuartal
-- [ ] Evaluasi performa tahunan
-- [ ] Skala ke tingkat nasional
+- Luncurkan ke semua 27 kabupaten
+- Pelatihan ulang model setiap kuartal
+- Evaluasi performa tahunan
+- Skala ke tingkat nasional
 
 ---
 
@@ -182,14 +182,6 @@ Pantau KPI berikut:
 **Tahunan**: Evaluasi model penuh, tinjauan strategis
 **Sesuai kebutuhan**: Sesuaikan threshold, perluas fitur
 
----
-
-## 📞 Dukungan & Kontak
-
-Untuk pertanyaan, perbaikan, atau dukungan implementasi:
-- Hubungi tim pengembangan
-- Email: [email Anda]
-- Telepon: [telepon Anda]
 
 ---
 
